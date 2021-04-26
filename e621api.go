@@ -224,22 +224,22 @@ type PostsPage struct {
 }
 
 type PostSearch struct {
-	tags  []string
-	page  int
-	limit int
+	Tags  []string
+	Page  int
+	Limit int
 }
 
 func (api *E621Api) GetPosts(search PostSearch) (posts []Post, error *E621Error) {
 	var p PostsPage
 
-	url := fmt.Sprintf("posts?tags=%s", url.QueryEscape(strings.Join(search.tags, " ")))
+	url := fmt.Sprintf("posts?tags=%s", url.QueryEscape(strings.Join(search.Tags, " ")))
 
-	if search.page != 0 {
-		url += fmt.Sprintf("&page=%v", search.page)
+	if search.Page != 0 {
+		url += fmt.Sprintf("&page=%v", search.Page)
 	}
 
-	if search.limit != 0 {
-		url += fmt.Sprintf("&limit=%v", search.limit)
+	if search.Limit != 0 {
+		url += fmt.Sprintf("&limit=%v", search.Limit)
 	}
 
 	if err := api.Request(url, &p); err != nil {
@@ -276,7 +276,7 @@ func (api *E621Api) GetPool(poolId int) (pool Pool, error *E621Error) {
 func (api *E621Api) GetPoolPosts(pool Pool) (posts []Post, error *E621Error) {
 	tags := []string{fmt.Sprintf("pool:%v", pool.ID)}
 
-	posts, error = api.GetPosts(PostSearch{tags: tags, limit: pool.PostCount})
+	posts, error = api.GetPosts(PostSearch{Tags: tags, Limit: pool.PostCount})
 	if error != nil {
 		return
 	}

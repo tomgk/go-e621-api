@@ -90,18 +90,18 @@ func (e *E621PathExtractor) GetPath(urlString string) (string, error) {
 var _ PathExtractor = &E621PathExtractor{}
 
 type DirectoryFileCache struct {
-	directory     string
-	pathExtractor PathExtractor
+	Directory     string
+	PathExtractor PathExtractor
 }
 
 func (c *DirectoryFileCache) ForUrl(url string) (file *os.File, filename string, err error) {
 	var path string
-	path, err = c.pathExtractor.GetPath(url)
+	path, err = c.PathExtractor.GetPath(url)
 	if err != nil {
 		return nil, "", err
 	}
 
-	filename = c.directory + "/" + path
+	filename = c.Directory + "/" + path
 
 	//open with O_EXCL so it fails if file already exists
 	file, err = os.OpenFile(filename, os.O_RDWR|os.O_CREATE|os.O_EXCL, 0755) //os.Create(c.directory+"/"+path)
@@ -115,7 +115,7 @@ func (c *DirectoryFileCache) ForUrl(url string) (file *os.File, filename string,
 
 func (c *DirectoryFileCache) String() string {
 	//return fmt.Sprintf(`DirectoryFileCache(directory: "%s", pathExtractor:%v)`, c.directory, c.pathExtractor)
-	return fmt.Sprintf(`DirectoryFileCache(directory: "%s")`, c.directory)
+	return fmt.Sprintf(`DirectoryFileCache(directory: "%s")`, c.Directory)
 }
 
 var _ FileCache = &DirectoryFileCache{}
